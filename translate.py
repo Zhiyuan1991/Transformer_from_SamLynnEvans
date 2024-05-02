@@ -41,7 +41,8 @@ def translate_sentence(sentence, model, opt, SRC, TRG):
             indexed.append(SRC.vocab.stoi[tok])
         else:
             indexed.append(get_synonym(tok, SRC))
-    sentence = Variable(torch.LongTensor([indexed]), device=opt.device)
+    #sentence = Variable(torch.LongTensor([indexed]), device=opt.device)
+    sentence = torch.LongTensor([indexed]).to(opt.device)
 
     sentence = beam_search(sentence, model, SRC, TRG, opt)
 
@@ -75,7 +76,9 @@ def main():
     opt = parser.parse_args()
 
     opt.device = 'cuda' if opt.no_cuda is False else 'cpu'
- 
+    opt.gpu_ids=[1]
+    torch.cuda.set_device(opt.gpu_ids[0])
+
     assert opt.k > 0
     assert opt.max_len > 10
 

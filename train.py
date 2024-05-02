@@ -92,7 +92,8 @@ def main():
     opt.device = 'cuda' if opt.no_cuda is False else 'cpu'
     if opt.device == 'cuda':
         assert torch.cuda.is_available()
-
+    opt.gpu_ids=[1]
+    torch.cuda.set_device(opt.gpu_ids[0])
     read_data(opt)
     SRC, TRG = create_fields(opt)
     opt.train = create_dataset(opt, SRC, TRG)
